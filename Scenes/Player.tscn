@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://b5p0xcedgytr6"]
+
+[ext_resource type="Script" path="res://Scripts/Player.gd" id="1_5mdh2"]
+[ext_resource type="PackedScene" uid="uid://cfwn5j48q6vrd" path="res://Scenes/Bullet.tscn" id="2_r3ixt"]
+[ext_resource type="Texture2D" uid="uid://bba6si60lkjq0" path="res://Assets/Player/hitman1_stand.png" id="2_wyo6b"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m7pwr"]
+size = Vector2(22, 36)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y2r6b"]
+radius = 15.0
+height = 48.0
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("bullet_spawn_pos") groups=["Player"]]
+script = ExtResource("1_5mdh2")
+bullet_spawn_pos = NodePath("BulletSpawnPos")
+bullet_scene = ExtResource("2_r3ixt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_wyo6b")
+offset = Vector2(3, 0)
+region_rect = Rect2(320, -64, 0, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_m7pwr")
+
+[node name="BulletSpawnPos" type="Marker2D" parent="."]
+position = Vector2(27, 9)
+
+[node name="Collision" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision"]
+position = Vector2(1, -1)
+shape = SubResource("CapsuleShape2D_y2r6b")
+
+[connection signal="body_entered" from="Collision" to="." method="_on_collision_body_entered"]
